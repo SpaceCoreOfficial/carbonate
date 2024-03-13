@@ -1,9 +1,13 @@
 import os, sys
+
 from prompt_toolkit import prompt
 from prompt_toolkit.formatted_text import HTML
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+
 from prompt_toolkit.shortcuts import input_dialog
 from prompt_toolkit.shortcuts import yes_no_dialog
+from prompt_toolkit.shortcuts import message_dialog
+
 
 
 save_dialog = input_dialog(
@@ -40,29 +44,36 @@ def editor(filename, unnamed):
         else:
             fff = ''
         inp = prompt('',
-                     multiline=True, default='%s' % "".join(fff),
-                     prompt_continuation=service.prompt_continuation, bottom_toolbar=service.bottom_toolbar_main(), auto_suggest=AutoSuggestFromHistory(),
-                     )
+                    multiline=True, default='%s' % "".join(fff),
+                    prompt_continuation=service.prompt_continuation, bottom_toolbar=service.bottom_toolbar_main(), auto_suggest=AutoSuggestFromHistory(),
+                    )
 
         if ("%s" % inp) == fff:
             pass
+            
         else:
             if save_or_not.run():
                 if unnamed == True:
                     temp = open(save_dialog.run(), 'w', encoding='utf-8')
                     temp.writelines("%s" % inp)
                     temp.close()
+                    
                 else:
                     temp = open(filename, 'w', encoding='utf-8')
                     temp.writelines("%s" % inp)
                     temp.close()
-
-            service.clear()
+                    
+            else:
+                pass
     except PermissionError:
-        print("[ALERT] - Bad file path")
+        message_dialog(
+            title='Permission Error',
+            text='"Carbonate" does not have sufficient rights to create rights in this location\nor edit the selected file').run()
 
     except UnicodeDecodeError:
-        print("[ALERT] - Bad unicode")
+        message_dialog(
+            title='UnicodeDecode Error',
+            text='"Carbonate" cannot recognize the Unicode in the file, therefore cannot open or edit it').run()
     except KeyboardInterrupt:
         pass
 
