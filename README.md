@@ -9,3 +9,7 @@ Just open a command prompt and enter this command
 ```python
 carbonate.py "path/to/your/file"
 ```
+## What about modules?
+```
+pip install prompt_toolkit
+```
