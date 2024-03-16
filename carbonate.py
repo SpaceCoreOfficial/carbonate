@@ -9,11 +9,10 @@ from prompt_toolkit.shortcuts import yes_no_dialog
 from prompt_toolkit.shortcuts import message_dialog
 
 
-
 save_dialog = input_dialog(
     title='Saving...',
     text='Please type filename:')
-    
+
 save_or_not = yes_no_dialog(
     title='Realy?',
     text='Do you want to save your file?')
@@ -21,9 +20,8 @@ save_or_not = yes_no_dialog(
 class service:
 
     def bottom_toolbar_main():
-        return HTML(filename + '\n|Alt+Enter or Esc+Enter - Exit|')
-    def bottom_toolbar_save_file():
-        return HTML(filename + '\n|Want to save?|')
+        return HTML("| " + filename + '\n| Alt+Enter or Esc+Enter - Exit')
+    
     def prompt_continuation(width, line_number, is_soft_wrap):
         return ' ' * width
 
@@ -32,7 +30,6 @@ class service:
             os.system('cls')
         elif os.name == "posix":
             os.system("clear")
-
 
 
 def editor(filename, unnamed):
@@ -79,12 +76,17 @@ def editor(filename, unnamed):
 
 
 if __name__ == '__main__':
-    try:
-        unnamed = False
-        filename = str(sys.argv[1])
-        editor(filename, unnamed)
-        
-    except IndexError:
-        unnamed = True
-        filename = "*unnamed"
-        editor(filename, unnamed)
+    if os.name != "nt":
+        message_dialog(
+            title='OS Error',
+            text='"Carbonate" is exclusively for Windows').run()
+    else:
+        try:
+            unnamed = False
+            filename = str(sys.argv[1])
+            editor(filename, unnamed)
+            
+        except IndexError:
+            unnamed = True
+            filename = "*unnamed"
+            editor(filename, unnamed)
